@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>The Land of Numbers: Homepage</title>
+		
+		<meta charset="UTF-8">
+		<meta name="description" content="The homepage of 'The Land of Numbers', a timed math game">
+		<meta name="keywords" content="HTML, CSS, JS">
+		<meta name="author" content="Elijah Dray P. Sendad">
+		<meta name="date-modified" content="May 15th, 2022">
+		
+		<link rel="stylesheet" href="css/numberstyle.css">
+	</head>
+	
+	<body>
+		<!-- Title -->
+		<header>
+			<h1 class="title">The Land of Numbers</h1>
+			<h3 class="subtitle"><i>A place to enjoy some calculations!</i></h3>
+		</header>
+		
+		<div class="titleBox">
+			<p class="titleInformation">Homepage</p>
+		</div>
+		
+		<!-- Mode -->
+		<div class="box">
+			<p class="information">Select a Mode:</p>
+			<button class="diffModeButton" id="basic" onclick="diff('basic');">The Four Basic Operations</button><br>
+			<div class="modeDescription">Practicing Addition, Subtraction, Multiplication, and Division!</div><br>
+			<button class="diffModeButton" id="exponents" onclick="diff('expo');">Equations Involving Exponents</button><br>
+			<div class="modeDescription">Practicing Exponents!</div><br>
+			<button class="diffModeButton" id="variable" onclick="diff('variable');">Solving for Variables</button><br>
+			<div class="modeDescription">Practicing Solving for Values of Variables!</div><br>
+			<button class="diffModeButton" id="logarithms" onclick="diff('logarithms');">Equations Involving Logarithms</button>
+			<div class="modeDescription">Practicing Logarithms!</div><br><br>
+			<p class="information" id="waitingTime"></p>
+		</div>
+		
+		<script>
+			// Disable and re-enable buttons
+			function initializeButtons() {
+				document.getElementById("basic").disabled = false;
+				document.getElementById("exponents").disabled = false;
+				document.getElementById("variable").disabled = false;
+				document.getElementById("logarithms").disabled = false;
+			}
+			
+			function disableButtons() {
+				document.getElementById("basic").disabled = true;
+				document.getElementById("exponents").disabled = true;
+				document.getElementById("variable").disabled = true;
+				document.getElementById("logarithms").disabled = true;
+			}
+			
+			// Timer is 3 seconds.
+			function diff(x) {
+				disableButtons();
+				wait = 300;
+				countdown(wait, x);
+			}
+			
+			// Redirect to corresponding page for each mode
+			function countdown(w, y) {
+				document.getElementById("waitingTime").style.color = "white";
+				if (w > 0) {
+					document.getElementById("waitingTime").innerHTML = "Wait " +
+						Math.floor(w / 100) + "." + (Math.floor(w / 10) % 10) + (w % 10)
+						+ " seconds...";
+					w -= 1;
+					setTimeout(function(){countdown(w, y)}, 10);
+				} else {
+					switch (y) {
+						case 'basic':
+							location.href = "htdocs/four-basic-operations.html";
+							break;
+						case 'expo':
+							location.href = "htdocs/operation-order-and-exponents.html";
+							break;
+						default:
+							document.getElementById("waitingTime").style.color = "orange";
+							document.getElementById("waitingTime").innerHTML = "Page not implemented."
+							break;
+					}
+					initializeButtons();
+					return;
+				}
+			}
+		</script>
+	</body>
+</html>
