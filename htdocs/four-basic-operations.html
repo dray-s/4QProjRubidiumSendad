@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>The Land of Numbers: Four Basic Operations</title>
+		
+		<meta charset="UTF-8">
+		<meta name="description" content="Page for practicing the four basic operations">
+		<meta name="keywords" content="HTML, CSS, JS">
+		<meta name="author" content="Elijah Dray P. Sendad">
+		<meta name="date-modified" content="May 15th, 2022">
+		
+		<link rel="stylesheet" href="../css/numberstyle.css">
+	</head>
+	
+	<body>
+		<!-- Title -->
+		<header>
+			<h1 class="title">The Land of Numbers</h1>
+			<h3 class="subtitle"><i>A place to enjoy some calculations!</i></h3>
+		</header>
+		
+		<div class="titleBox">
+			<p class="titleInformation">The Four Basic Operations</p>
+		</div>
+		
+		<!-- Quiz -->
+		<div class="box">
+			<button class="diffModeButton" id="basic" onclick="startQuiz();">Start Quiz!</button><br>
+			<form id="inputBox" class="quizBox" action="javascript:answer();" method="get">
+				<fieldset id="field">
+					<legend>Quiz</legend>
+						<label id="var1" for="ans"></label>&nbsp;<label id="operation" for="ans"></label>&nbsp;<label id="var2" for="ans"></label>&nbsp;=
+						<input type="text" id="ans" name="ans" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					<input type="submit" value="Submit">
+					<input type="reset" value="Reset">
+				</fieldset>
+			</form>
+			<p class="information" id="checker"></p><br>
+			<p class="information" id="countCorrect"></p><br>
+			<button class="diffModeButton" id="home" onclick="sendHome();">Back to Homepage</button>
+		</div>
+		
+		<script>
+			const OPERATIONS = ["+", "−", "×", "÷"];
+			var var1 = var2 = method = correctAnswer = count = 0;
+		
+			function startQuiz() {
+				count = 0;
+				document.getElementById("basic").innerHTML = "Reset Quiz!";
+				document.getElementById("countCorrect").innerHTML = "No answers correct!";
+				document.getElementById("ans").disabled = false;
+				generateQuestion();
+			}
+			
+			function generateQuestion() {
+				method = Math.floor(Math.random() * 4);
+				var1 = Math.floor(Math.random() * 25);
+				var2 = Math.floor(Math.random() * 25);
+				
+				switch (method) {
+					case 0:
+						correctAnswer = var1 + var2;
+						break;
+					case 1:
+						correctAnswer = Math.abs(var1 - var2);
+						if (var2 > var1) {
+							var1 = var2;
+							var2 = var1 - correctAnswer;
+						}
+						break;
+					case 2:
+						correctAnswer = var1 * var2;
+						break;
+					case 3:
+						correctAnswer = var1;
+						var1 *= var2;
+						break;
+				}
+				
+				if (method == 3 && var2 == 0) var2 = Math.floor(Math.random() * 24) + 1;
+				
+				document.getElementById("var1").innerHTML = var1;
+				document.getElementById("operation").innerHTML = OPERATIONS[method];
+				document.getElementById("var2").innerHTML = var2;
+			}
+			
+			function answer() {
+				ans = document.getElementById("ans").value;
+				if (ans == correctAnswer) {
+					document.getElementById("checker").innerHTML = "Correct!";
+					count++;
+					if (count != 1) {
+						document.getElementById("countCorrect").innerHTML = count + " answers correct!";
+					} else document.getElementById("countCorrect").innerHTML = "1 answer correct!";
+				} else {
+					document.getElementById("checker").innerHTML = "Wrong!";
+				}
+				document.getElementById("ans").value = "";
+				generateQuestion();
+			}
+		
+			// Input Border Colors
+			
+			function blankInput(elem) {
+				if (elem.value.length == 0) elem.style.borderColor = "#ff3825";
+				else elem.style.borderColor = "#4bff31";
+			}
+			
+			function highlightedInput(elem) {
+				elem.style.borderColor = "#ffc600";
+			}
+			
+			// Back to Home
+			
+			function sendHome() {
+				location.href = '../index.html';
+			}
+		</script>
+	</body>
+</html>
