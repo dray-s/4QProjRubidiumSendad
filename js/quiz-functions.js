@@ -98,7 +98,7 @@ function sendHome() {
 
 function checkForUsername() {
 	if (document.cookie.match("username=") == null) window.location.assign("../index.html");
-	else document.getElementById("legendName").innerHTML += "&nbsp;--&nbsp" + getName(); 
+	else document.getElementById("legendName").innerHTML = getName(); 
 }
 
 // Extract Cookie Username Value
