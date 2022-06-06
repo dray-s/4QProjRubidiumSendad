@@ -97,7 +97,23 @@ function sendHome() {
 // Check if the user has entered a name
 
 function checkForUsername() {
-	if (document.cookie.match("username=") == null) {
-		window.location.assign("../index.html");
-	}
+	if (document.cookie.match("username=") == null) window.location.assign("../index.html");
+	else document.getElementById("legendName").innerHTML += "&nbsp;--&nbsp" + getName(); 
+}
+
+// Extract Cookie Username Value
+
+function getName() {
+  nameFind = "username=";
+  cArr = decodeURIComponent(document.cookie).split(';');
+  for(i in cArr) {
+    cFind = cArr[i];
+    while (cFind.charAt(0) == ' ') {
+      cFind = cFind.substring(1);
+    }
+    if (cFind.indexOf(nameFind) == 0) {
+      return cFind.substring(nameFind.length, cFind.length);
+    }
+  }
+  return "";
 }
