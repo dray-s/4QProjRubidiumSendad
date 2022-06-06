@@ -7,7 +7,7 @@
 		<meta name="description" content="Page for practicing the four basic operations">
 		<meta name="keywords" content="HTML, CSS, JS">
 		<meta name="author" content="Elijah Dray P. Sendad">
-		<meta name="date-modified" content="May 15th, 2022">
+		<meta name="revised" content="June 6th, 2022">
 		
 		<link rel="stylesheet" href="../css/numberstyle.css">
 	</head>
@@ -24,39 +24,315 @@
 		</div>
 		
 		<!-- Quiz -->
-		<div class="box">
+		<div class="box answerArea">
 			<button class="diffModeButton" id="basic" onclick="startQuiz();">Start Quiz!</button><br>
 			<form id="inputBox" class="quizBox" action="javascript:answer();" method="get">
 				<fieldset id="field">
-					<legend>Quiz</legend>
-						<label id="var1" for="ans"></label>&nbsp;<label id="operation" for="ans"></label>&nbsp;<label id="var2" for="ans"></label>&nbsp;=
-						<input type="text" id="ans" name="ans" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
-					<input type="submit" value="Submit">
-					<input type="reset" value="Reset">
+					<!-- Fill In The Blanks -->
+					<div class="question">
+					<label id="var1" for="ansb1"></label>
+					<input class="ansBlank" type="hidden" id="ansb1" name="ans-blank" autocomplete="off" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					<label id="operation" for="ans"></label>
+					<label id="var2" for="ansb2"></label>
+					<input class="ansBlank" type="hidden" id="ansb2" name="ans-blank" autocomplete="off" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					<label id="equal" for="ans"></label> 
+					<label id="var3" for="ansb3"></label> 
+					<input class="ansBlank" type="hidden" id="ansb3" name="ans-blank" autocomplete="off" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					</div>
+					<br>
+					<!-- Textbox -->
+					<input class="ans" type="hidden" id="ans" name="ans-box" autocomplete="off" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					<!-- Multiple Choice -->
+					<input class="ans" type="hidden" id="ansr1" name="ans-radio" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					<label class="ansRadio" id="ansr1v" for="ansr1"></label>&nbsp;
+					<input class="ans" type="hidden" id="ansr2" name="ans-radio" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					<label class="ansRadio" id="ansr2v" for="ansr2"></label>&nbsp;
+					<input class="ans" type="hidden" id="ansr3" name="ans-radio" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					<label class="ansRadio" id="ansr3v" for="ansr3"></label>&nbsp;
+					<input class="ans" type="hidden" id="ansr4" name="ans-radio" onblur="blankInput(this);" onfocus="highlightedInput(this);" disabled>
+					<label class="ansRadio" id="ansr4v" for="ansr4"></label>
+					<br>
+					<br>
+					<input id="submit" type="submit" value="Submit" disabled>
+					<input id="reset" type="reset" value="Reset" disabled>
 				</fieldset>
 			</form>
-			<p class="information" id="checker"></p><br>
-			<p class="information" id="countCorrect"></p><br>
+			<p class="timer" id="timeCount">Time is up!</p><br>
+			<p class="pointCount" id="pointCount">0 points</p><br>
+			<p class="information" id="checker">--</p><br>
+			<p class="information" id="comboCount">--</p><br>
+			<p class="information" id="countCorrect">--</p><br>
 			<button class="diffModeButton" id="home" onclick="sendHome();">Back to Homepage</button>
 		</div>
 		
+		<script src="../js/quiz-functions.js"></script>
 		<script>
 			const OPERATIONS = ["+", "−", "×", "÷"];
-			var var1 = var2 = method = correctAnswer = count = 0;
+			var var1 = var2 = var3 = method = correctAnswer = count = timerEnd = questionTime = combo = points = inputKind = blanker = 0;
+		
+			// Start the game and activate the form
 		
 			function startQuiz() {
-				count = 0;
+				points = count = 0;
+				document.getElementById("pointCount").innerHTML = points + " points";
+				
 				document.getElementById("basic").innerHTML = "Reset Quiz!";
+				document.getElementById("basic").onclick = resetQuiz;
+				
 				document.getElementById("countCorrect").innerHTML = "No answers correct!";
-				document.getElementById("ans").disabled = false;
+				
+				document.getElementById("ans").disabled = 
+				
+				document.getElementById("ansr1").disabled = 
+				document.getElementById("ansr2").disabled = 
+				document.getElementById("ansr3").disabled = 
+				document.getElementById("ansr4").disabled = 
+				
+				document.getElementById("ansb1").disabled = 
+				document.getElementById("ansb2").disabled = 
+				document.getElementById("ansb3").disabled = 
+				
+				document.getElementById("submit").disabled = 
+				document.getElementById("reset").disabled = false;
+				
 				generateQuestion();
+				startTimer(60000);
 			}
+			
+			// Reset the game and the form
+			
+			function resetQuiz() {
+				var1 = var2 = var3 = method = correctAnswer = count = timerEnd = questionTime = combo = points = inputKind = blanker = 0;
+				
+				document.getElementById("basic").innerHTML = "Start Quiz!";
+				document.getElementById("basic").onclick = startQuiz;
+				
+				document.getElementById("ans").disabled = 
+				document.getElementById("ansr1").disabled = 
+				document.getElementById("ansr2").disabled = 
+				document.getElementById("ansr3").disabled = 
+				document.getElementById("ansr4").disabled = 
+				document.getElementById("ansb1").disabled = 
+				document.getElementById("ansb2").disabled = 
+				document.getElementById("ansb3").disabled = 
+				document.getElementById("submit").disabled = 
+				document.getElementById("reset").disabled = true;
+				
+				document.getElementById("ans").type = 
+				document.getElementById("ansr1").type = 
+				document.getElementById("ansr2").type = 
+				document.getElementById("ansr3").type = 
+				document.getElementById("ansr4").type = 
+				document.getElementById("ansb1").type = 
+				document.getElementById("ansb2").type = 
+				document.getElementById("ansb3").type = "hidden";
+				
+				document.getElementById("var1").innerHTML = 
+				document.getElementById("operation").innerHTML = 
+				document.getElementById("var2").innerHTML = 
+				document.getElementById("equal").innerHTML = 
+				document.getElementById("var3").innerHTML = 
+				document.getElementById("ansr1v").innerHTML = 
+				document.getElementById("ansr2v").innerHTML = 
+				document.getElementById("ansr3v").innerHTML = 
+				document.getElementById("ansr4v").innerHTML = "";
+				
+				document.getElementById("checker").innerHTML = 
+				document.getElementById("comboCount").innerHTML = 
+				document.getElementById("countCorrect").innerHTML = "";
+			}
+			
+			// Set up the form, decide the kind of input, and generate a question
 			
 			function generateQuestion() {
 				method = Math.floor(Math.random() * 4);
-				var1 = Math.floor(Math.random() * 25);
-				var2 = Math.floor(Math.random() * 25);
+				var1 = Math.floor(Math.random() * 29) + 1;
+				var2 = Math.floor(Math.random() * 29) + 1;
 				
+				inputKind = Math.floor(Math.random() * 3);
+				
+				document.getElementById("ansr1v").innerHTML = 
+				document.getElementById("ansr2v").innerHTML = 
+				document.getElementById("ansr3v").innerHTML = 
+				document.getElementById("ansr4v").innerHTML = 
+				
+				document.getElementById("ansb1").value = 
+				document.getElementById("ansb2").value = 
+				document.getElementById("ansb3").value = "";
+				
+				document.getElementById("ansr1").checked = 
+				document.getElementById("ansr2").checked = 
+				document.getElementById("ansr3").checked = 
+				document.getElementById("ansr4").checked = false;
+				
+				switch (inputKind) {
+					case 0:
+						document.getElementById("ans").type = "number";
+						document.getElementById("ans").focus();
+						document.getElementById("ans").select();
+						
+						document.getElementById("ansr1").type = 
+						document.getElementById("ansr2").type = 
+						document.getElementById("ansr3").type = 
+						document.getElementById("ansr4").type = 
+						
+						document.getElementById("ansb1").type = 
+						document.getElementById("ansb2").type = 
+						document.getElementById("ansb3").type = "hidden";
+						
+						pickThreeValues();
+				
+						document.getElementById("var1").innerHTML = var1;
+						document.getElementById("operation").innerHTML = OPERATIONS[method];
+						document.getElementById("var2").innerHTML = var2;
+						
+						document.getElementById("equal").innerHTML = 
+						document.getElementById("var3").innerHTML = "";
+						break;
+					case 1:
+						document.getElementById("ansr1").type = 
+						document.getElementById("ansr2").type = 
+						document.getElementById("ansr3").type = 
+						document.getElementById("ansr4").type = "radio";
+						
+						document.getElementById("ans").type = 
+						
+						document.getElementById("ansb1").type = 
+						document.getElementById("ansb2").type = 
+						document.getElementById("ansb3").type = "hidden";
+					
+						pickThreeValues();
+						
+						randomRadio = Math.floor(Math.random() * 4);
+						
+						wrong = [Math.abs(correctAnswer + (Math.floor(Math.random() * 80) - 40)),
+								Math.abs(correctAnswer + (Math.floor(Math.random() * 80) - 40)),
+								Math.abs(correctAnswer + (Math.floor(Math.random() * 80) - 40))]
+								
+						checkForCorrectWrongs(wrong);
+						
+						appearanceOrder = [];
+						appearanceOrder[0] = Math.floor(Math.random() * 3) + 1;
+						
+						switch (appearanceOrder[0]) {
+							case 1:
+								appearanceOrder[1] = Math.floor(Math.random() * 2) + 2;
+								if (appearanceOrder[1] == 2) appearanceOrder[2] = 3;
+								else appearanceOrder[2] = 2;
+								break;
+							case 2:
+								appearanceOrder[1] = Math.floor(Math.random() * 2) + 1;
+								if (appearanceOrder[1] == 1) appearanceOrder[2] = 3;
+								else {
+									appearanceOrder[1] = 3;
+									appearanceOrder[2] = 1;
+								}
+								break;
+							case 3:
+								appearanceOrder[1] = Math.floor(Math.random() * 2) + 1;
+								if (appearanceOrder[1] == 1) appearanceOrder[2] = 2;
+								else appearanceOrder[2] = 1;
+								break;
+						}
+								
+						switch (randomRadio) {
+							case 0:
+								document.getElementById("ansr1").value = document.getElementById("ansr1v").innerHTML = correctAnswer;
+								document.getElementById("ansr2").value = document.getElementById("ansr2v").innerHTML = wrong[appearanceOrder[0] - 1];
+								document.getElementById("ansr3").value = document.getElementById("ansr3v").innerHTML = wrong[appearanceOrder[1] - 1];
+								document.getElementById("ansr4").value = document.getElementById("ansr4v").innerHTML = wrong[appearanceOrder[2] - 1];
+								break;
+							case 1:
+								document.getElementById("ansr1").value = document.getElementById("ansr1v").innerHTML = wrong[appearanceOrder[0] - 1];
+								document.getElementById("ansr2").value = document.getElementById("ansr2v").innerHTML = correctAnswer;
+								document.getElementById("ansr3").value = document.getElementById("ansr3v").innerHTML = wrong[appearanceOrder[1] - 1];
+								document.getElementById("ansr4").value = document.getElementById("ansr4v").innerHTML = wrong[appearanceOrder[2] - 1];
+								break;
+							case 2:
+								document.getElementById("ansr1").value = document.getElementById("ansr1v").innerHTML = wrong[appearanceOrder[0] - 1];
+								document.getElementById("ansr2").value = document.getElementById("ansr2v").innerHTML = wrong[appearanceOrder[1] - 1];
+								document.getElementById("ansr3").value = document.getElementById("ansr3v").innerHTML = correctAnswer;
+								document.getElementById("ansr4").value = document.getElementById("ansr4v").innerHTML = wrong[appearanceOrder[2] - 1];
+								break;
+							case 3:
+								document.getElementById("ansr1").value = document.getElementById("ansr1v").innerHTML = wrong[appearanceOrder[0] - 1];
+								document.getElementById("ansr2").value = document.getElementById("ansr2v").innerHTML = wrong[appearanceOrder[1] - 1];
+								document.getElementById("ansr3").value = document.getElementById("ansr3v").innerHTML = wrong[appearanceOrder[2] - 1];
+								document.getElementById("ansr4").value = document.getElementById("ansr4v").innerHTML = correctAnswer;
+								break;
+						}
+						
+						document.getElementById("var1").innerHTML = var1;
+						document.getElementById("operation").innerHTML = OPERATIONS[method];
+						document.getElementById("var2").innerHTML = var2;
+						
+						document.getElementById("equal").innerHTML = 
+						document.getElementById("var3").innerHTML = "";
+						break;
+					case 2:
+						document.getElementById("ans").type = 
+						
+						document.getElementById("ansr1").type = 
+						document.getElementById("ansr2").type = 
+						document.getElementById("ansr3").type = 
+						document.getElementById("ansr4").type = "hidden";
+						
+						pickThreeValues();
+						var3 = correctAnswer;
+						
+						blanker = Math.floor(Math.random() * 3) + 1;
+						switch (blanker) {
+							case 1:
+								document.getElementById("ansb1").type = "number";
+								document.getElementById("ansb2").type = "hidden";
+								document.getElementById("ansb3").type = "hidden";
+								
+								document.getElementById("ansb1").focus();
+								document.getElementById("ansb1").select();
+								correctAnswer = var1;
+								
+								document.getElementById("var1").innerHTML = "";
+								document.getElementById("var2").innerHTML = var2;
+								document.getElementById("var3").innerHTML = var3;
+								break;
+							case 2:
+								document.getElementById("ansb1").type = "hidden";
+								document.getElementById("ansb2").type = "number";
+								document.getElementById("ansb3").type = "hidden";
+								
+								document.getElementById("ansb2").focus();
+								document.getElementById("ansb2").select();
+								correctAnswer = var2;
+								
+								document.getElementById("var1").innerHTML = var1;
+								document.getElementById("var2").innerHTML = "";
+								document.getElementById("var3").innerHTML = var3;
+								break;
+							case 3:
+								document.getElementById("ansb1").type = "hidden";
+								document.getElementById("ansb2").type = "hidden";
+								document.getElementById("ansb3").type = "number";
+								
+								document.getElementById("ansb3").focus();
+								document.getElementById("ansb3").select();
+								correctAnswer = var3;
+								
+								document.getElementById("var1").innerHTML = var1;
+								document.getElementById("var2").innerHTML = var2;
+								document.getElementById("var3").innerHTML = "";
+								break;
+						}
+						
+						document.getElementById("operation").innerHTML = OPERATIONS[method];
+						document.getElementById("equal").innerHTML = "="
+						break;
+				}
+				questionTime = new Date();
+			}
+			
+			// Randomize the three values in the equation
+			
+			function pickThreeValues() {
 				switch (method) {
 					case 0:
 						correctAnswer = var1 + var2;
@@ -76,45 +352,42 @@
 						var1 *= var2;
 						break;
 				}
-				
-				if (method == 3 && var2 == 0) var2 = Math.floor(Math.random() * 24) + 1;
-				
-				document.getElementById("var1").innerHTML = var1;
-				document.getElementById("operation").innerHTML = OPERATIONS[method];
-				document.getElementById("var2").innerHTML = var2;
 			}
 			
-			function answer() {
-				ans = document.getElementById("ans").value;
+			// Check if the answer is correct
+			
+			function checkAnswer() {
 				if (ans == correctAnswer) {
-					document.getElementById("checker").innerHTML = "Correct!";
+					document.getElementById("checker").innerHTML = "Correct Answer!";
+					timeTaken = new Date() - questionTime;
+					if (timeTaken < 300) {
+						pointAdd = 800 - timeTaken;
+					} else if (timeTaken < 600) {
+						pointAdd = 650 - (timeTaken / 2);
+					} else if (timeTaken < 1000) {
+						pointAdd = 500 - (timeTaken / 4);
+					} else pointAdd = 250 / (1 + (timeTaken - 1000) / 1000);
+					pointAdd *= (1 + (combo / 50));
+					pointAdd = Math.round(1000 * pointAdd);
+					points += pointAdd;
 					count++;
+					combo++;
+					timerEnd = new Date(timerEnd.getTime() + timeTaken * 0.005 * (1 + (combo / 50)));
+					document.getElementById("pointCount").innerHTML = points.toLocaleString("en-US") + " Points";
+					document.getElementById("comboCount").innerHTML = "×" + combo + " Combo!";
 					if (count != 1) {
 						document.getElementById("countCorrect").innerHTML = count + " answers correct!";
 					} else document.getElementById("countCorrect").innerHTML = "1 answer correct!";
 				} else {
-					document.getElementById("checker").innerHTML = "Wrong!";
+					document.getElementById("checker").innerHTML = "Incorrect Answer!";
+					combo = 0;
+					document.getElementById("comboCount").innerHTML = "Lost Combo!";
 				}
 				document.getElementById("ans").value = "";
 				generateQuestion();
 			}
-		
-			// Input Border Colors
 			
-			function blankInput(elem) {
-				if (elem.value.length == 0) elem.style.borderColor = "#ff3825";
-				else elem.style.borderColor = "#4bff31";
-			}
-			
-			function highlightedInput(elem) {
-				elem.style.borderColor = "#ffc600";
-			}
-			
-			// Back to Home
-			
-			function sendHome() {
-				location.href = '../index.html';
-			}
+			checkForUsername();
 		</script>
 	</body>
 </html>
