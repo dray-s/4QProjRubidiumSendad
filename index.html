@@ -7,7 +7,7 @@
 		<meta name="description" content="The homepage of 'The Land of Numbers', a timed math game">
 		<meta name="keywords" content="HTML, CSS, JS">
 		<meta name="author" content="Elijah Dray P. Sendad">
-		<meta name="date-modified" content="May 15th, 2022">
+		<meta name="revised" content="June 6th, 2022">
 		
 		<link rel="stylesheet" href="css/numberstyle.css">
 	</head>
@@ -15,10 +15,18 @@
 	<body>
 		<!-- Title -->
 		<header>
-			<h1 class="title">The Land of Numbers</h1>
-			<h3 class="subtitle"><i>A place to enjoy some calculations!</i></h3>
+				<h1 class="title">The Land of Numbers</h1>
+				<h3 class="subtitle"><i>A place to enjoy some calculations!</i></h3>
 		</header>
 		
+		<div>
+			<form id="signupBox" class="quizBox" action="javascript:login();" method="get">
+			<button id="login" type="submit">Set Username</button>
+				<span>&nbsp;Username:</span>
+				<input type="text" id="username" autocomplete="off" onblur="blankInput(this);" onfocus="highlightedInput(this);"></input>
+			</form>
+			<label for="username" id="loginMessage"></label>
+		</div>
 		<div class="titleBox">
 			<p class="titleInformation">Homepage</p>
 		</div>
@@ -28,29 +36,26 @@
 			<p class="information">Select a Mode:</p>
 			<button class="diffModeButton" id="basic" onclick="diff('basic');">The Four Basic Operations</button><br>
 			<div class="modeDescription">Practicing Addition, Subtraction, Multiplication, and Division!</div><br>
+			<button class="diffModeButton" id="basic-plus" onclick="diff('basic+');">Harder Mathematics</button><br>
+			<div class="modeDescription">The previous mode only picks numbers from a pool of 1 to 30. This mode picks between 1 to 100. Have fun!</div><br>
 			<button class="diffModeButton" id="exponents" onclick="diff('expo');">Equations Involving Exponents</button><br>
 			<div class="modeDescription">Practicing Exponents!</div><br>
-			<button class="diffModeButton" id="variable" onclick="diff('variable');">Solving for Variables</button><br>
-			<div class="modeDescription">Practicing Solving for Values of Variables!</div><br>
-			<button class="diffModeButton" id="logarithms" onclick="diff('logarithms');">Equations Involving Logarithms</button>
-			<div class="modeDescription">Practicing Logarithms!</div><br><br>
 			<p class="information" id="waitingTime"></p>
 		</div>
 		
+		<script src="js/quiz-functions.js"></script>
 		<script>
 			// Disable and re-enable buttons
 			function initializeButtons() {
 				document.getElementById("basic").disabled = false;
 				document.getElementById("exponents").disabled = false;
-				document.getElementById("variable").disabled = false;
-				document.getElementById("logarithms").disabled = false;
+				document.getElementById("basic-plus").disabled = false;
 			}
 			
 			function disableButtons() {
 				document.getElementById("basic").disabled = true;
 				document.getElementById("exponents").disabled = true;
-				document.getElementById("variable").disabled = true;
-				document.getElementById("logarithms").disabled = true;
+				document.getElementById("basic-plus").disabled = true;
 			}
 			
 			// Timer is 3 seconds.
@@ -74,6 +79,9 @@
 						case 'basic':
 							location.href = "htdocs/four-basic-operations.html";
 							break;
+						case 'basic+':
+							location.href = "htdocs/harder-mathematics.html";
+							break;
 						case 'expo':
 							location.href = "htdocs/operation-order-and-exponents.html";
 							break;
@@ -84,6 +92,26 @@
 					}
 					initializeButtons();
 					return;
+				}
+			}
+			
+			// Sign-in
+			
+			function login() {
+				if (document.getElementById("username").value.length > 0) {
+					date = new Date();
+					document.cookie = "username=" + document.getElementById("username").value + 
+										";expires=" + (date.setTime(date.getTime() + (604800000))) + ";path=/";
+					console.log(document.cookie);
+					console.log(document.getElementById("username").value);
+				}
+			}
+			
+			// Check if logged in upon entry
+			
+			function loginEntryCheck() {
+				if (document.cookie.match("username=") == null) {
+					document.getElementById("loginMessage").innerHTML = "Please enter a username."
 				}
 			}
 		</script>
