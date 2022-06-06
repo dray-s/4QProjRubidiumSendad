@@ -101,18 +101,15 @@
 				if (document.getElementById("username").value.length > 0) {
 					date = new Date();
 					document.cookie = "username=" + document.getElementById("username").value + 
-										";expires=" + (date.setTime(date.getTime() + (604800000))) + ";path=/";
-					console.log(document.cookie);
-					console.log(document.getElementById("username").value);
+							";expires=" + (date.setTime(date.getTime() + (604800000))) + ";path=/";
 				}
 			}
 			
 			// Check if logged in upon entry
 			
 			function loginEntryCheck() {
-				if (document.cookie.match("username=") == null) {
+				if (document.cookie.match("username=") == null)
 					document.getElementById("loginMessage").innerHTML = "Please enter a username."
-				}
 			}
 		</script>
 	</body>
